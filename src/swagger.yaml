@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Turnos Médicos
+  description: Documentación simulada de endpoints REST para el sistema de gestión de turnos médicos.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor local de pruebas (simulación)
+
+paths:
+  /pacientes:
+    post:
+      summary: Registrar un nuevo paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+      responses:
+        '201':
+          description: Paciente registrado correctamente
+        '400':
+          description: Datos inválidos
+
+  /pacientes/{id}:
+    get:
+      summary: Obtener datos de un paciente por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos del paciente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+        '404':
+          description: Paciente no encontrado
+
+  /medicos:
+    post:
+      summary: Registrar un nuevo médico
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+      responses:
+        '201':
+          description: Médico registrado correctamente
+
+  /turnos:
+    post:
+      summary: Registrar un nuevo turno
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Turno'
+      responses:
+        '201':
+          description: Turno registrado correctamente
+        '400':
+          description: Datos inválidos
+
+  /turnos/{id}:
+    get:
+      summary: Obtener información de un turno
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos del turno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Turno'
+        '404':
+          description: Turno no encontrado
+
+    delete:
+      summary: Cancelar un turno
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Turno cancelado exitosamente
+        '404':
+          description: Turno no encontrado
+
+components:
+  schemas:
+    Paciente:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+
+    Medico:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        especialidad:
+          type: string
+
+    Turno:
+      type: object
+      properties:
+        id:
+          type: integer
+        pacienteId:
+          type: integer
+        medicoId:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        hora:
+          type: string
+          format: time
+        especialidad:
+          type: string
